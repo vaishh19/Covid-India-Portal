@@ -1,297 +1,111 @@
-# Covid-19 India Portal
+COVID-19 India Portal
 
-Given two files `app.js` and a database file `covid19IndiaPortal.db` consisting of three tables `state`, `district` and `user`.
+A secure RESTful API built using Node.js and Express to manage and retrieve COVID-19 statistics for Indian states and districts with JWT-based authentication.
 
-Write APIs to perform operations on the tables `state`, `district` only after authentication of the user.
+🚀 Features
 
-The columns of the tables are given below,
+User authentication using JWT
 
-**State Table**
+Secure password handling with bcrypt
 
-| Columns    | Type    |
-| ---------- | ------- |
-| state_id   | INTEGER |
-| state_name | TEXT    |
-| population | INTEGER |
+CRUD operations for district data
 
-**District Table**
+Retrieve state-wise COVID statistics
 
-| Columns       | Type    |
-| ------------- | ------- |
-| district_id   | INTEGER |
-| district_name | TEXT    |
-| state_id      | INTEGER |
-| cases         | INTEGER |
-| cured         | INTEGER |
-| active        | INTEGER |
-| deaths        | INTEGER |
+Protected routes using middleware
 
-You can use your previous code if required.
+Data persistence using SQLite
 
-#### Sample Valid User Credentials
+🛠️ Tech Stack
 
-```
-{
-  "username": "christopher_phillips",
-  "password": "christy@123"
-}
-```
+Node.js
 
-### API 1
+Express.js
 
-#### Path: `/login/`
+SQLite
 
-#### Method: `POST`
+JWT (JSON Web Token)
 
-**Request**
+bcrypt
 
-```
-{
-  "username": "christopher_phillips",
-  "password": "christy@123"
-}
-```
+JavaScript (ES6)
 
-- **Scenario 1**
+📂 Project Structure
+.
+├── app.js
+├── covid19IndiaPortal.db
+├── package.json
+└── package-lock.json
 
-  - **Description**:
+🔐 Authentication
 
-    If an unregistered user tries to login
+Login endpoint generates a JWT token
 
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Invalid user
-      ```
+Token must be passed in the Authorization header as:
 
-- **Scenario 2**
+Authorization: Bearer <jwt_token>
 
-  - **Description**:
 
-    If the user provides an incorrect password
+All routes except /login/ are protected
 
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Invalid password
-      ```
+📌 API Endpoints
+Login
 
-- **Scenario 3**
+POST /login/
+Authenticates user and returns JWT token.
 
-  - **Description**:
+States
 
-    Successful login of the user
+GET /states/ → Get all states
 
-  - **Response**
+GET /states/:stateId/ → Get specific state details
 
-    Return the JWT Token
+Districts
 
-    ```
-    {
-      "jwtToken": "ak2284ns8Di32......"
-    }
-    ```
+POST /districts/ → Add a new district
 
-### Authentication with Token
+GET /districts/:districtId/ → Get district details
 
-- **Scenario 1**
+PUT /districts/:districtId/ → Update district details
 
-  - **Description**:
+DELETE /districts/:districtId/ → Delete a district
 
-    If the token is not provided by the user or an invalid token
+State Statistics
 
-  - **Response**
-    - **Status code**
-      ```
-      401
-      ```
-    - **Body**
-      ```
-      Invalid JWT Token
-      ```
+GET /states/:stateId/stats/
+Returns total cases, cured, active, and deaths for a state
 
-- **Scenario 2**
-  After successful verification of token proceed to next middleware or handler
+⚙️ Key Concepts Used
 
-### API 2
+REST API design
 
-#### Path: `/states/`
+Middleware for authentication
 
-#### Method: `GET`
+JWT token validation
 
-#### Description:
+Password hashing with bcrypt
 
-Returns a list of all states in the state table
+SQL queries and joins
 
-#### Response
+Async/Await
 
-```
-[
-  {
-    "stateId": 1,
-    "stateName": "Andaman and Nicobar Islands",
-    "population": 380581
-  },
+▶️ How to Run Locally
+git clone <repository-url>
+cd covid19-india-portal
+npm install
+node app.js
 
-  ...
-]
-```
 
-### API 3
+Server runs at:
 
-#### Path: `/states/:stateId/`
+http://localhost:3000/
 
-#### Method: `GET`
+📌 Future Enhancements
 
-#### Description:
+Role-based access control (Admin/User)
 
-Returns a state based on the state ID
+Input validation and error handling
 
-#### Response
+Pagination for large datasets
 
-```
-{
-  "stateId": 8,
-  "stateName": "Delhi",
-  "population": 16787941
-}
-```
-
-### API 4
-
-#### Path: `/districts/`
-
-#### Method: `POST`
-
-#### Description:
-
-Create a district in the district table, `district_id` is auto-incremented
-
-#### Request
-
-```
-{
-  "districtName": "Bagalkot",
-  "stateId": 3,
-  "cases": 2323,
-  "cured": 2000,
-  "active": 315,
-  "deaths": 8
-}
-```
-
-#### Response
-
-```
-District Successfully Added
-```
-
-### API 5
-
-#### Path: `/districts/:districtId/`
-
-#### Method: `GET`
-
-#### Description:
-
-Returns a district based on the district ID
-
-#### Response
-
-```
-{
-  "districtId": 322,
-  "districtName": "Palakkad",
-  "stateId": 17,
-  "cases": 61558,
-  "cured": 59276,
-  "active": 2095,
-  "deaths": 177
-}
-```
-
-### API 6
-
-#### Path: `/districts/:districtId/`
-
-#### Method: `DELETE`
-
-#### Description:
-
-Deletes a district from the district table based on the district ID
-
-#### Response
-
-```
-District Removed
-
-```
-
-### API 7
-
-#### Path: `/districts/:districtId/`
-
-#### Method: `PUT`
-
-#### Description:
-
-Updates the details of a specific district based on the district ID
-
-#### Request
-
-```
-{
-  "districtName": "Nadia",
-  "stateId": 3,
-  "cases": 9628,
-  "cured": 6524,
-  "active": 3000,
-  "deaths": 104
-}
-```
-
-#### Response
-
-```
-
-District Details Updated
-
-```
-
-### API 8
-
-#### Path: `/states/:stateId/stats/`
-
-#### Method: `GET`
-
-#### Description:
-
-Returns the statistics of total cases, cured, active, deaths of a specific state based on state ID
-
-#### Response
-
-```
-{
-  "totalCases": 724355,
-  "totalCured": 615324,
-  "totalActive": 99254,
-  "totalDeaths": 9777
-}
-
-```
-
-<br/>
-
-Use `npm install` to install the packages.
-
-**Export the express instance using the default export syntax.**
-
-**Use Common JS module syntax.**
+Deployment to cloud platform
