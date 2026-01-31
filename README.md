@@ -89,17 +89,6 @@ SQL queries and joins
 
 Async/Await
 
-▶️ How to Run Locally
-git clone <repository-url>
-cd covid19-india-portal
-npm install
-node app.js
-
-
-Server runs at:
-
-http://localhost:3000/
-
 📌 Future Enhancements
 
 Role-based access control (Admin/User)
